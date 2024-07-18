@@ -2,23 +2,23 @@
 
 ## Objective
 
-Implement a RESTful API for a fictional online bookstore using a database of your choice. The API should provide functionality for user signup, login, book management, and search.
+Implement a RESTful API for a fictional online bookstore using a database of your choice. The API should provide functionality for nagraUser signup, login, book management, and search.
 
 ## Requirements
 
 ### 1. User Management
-- **Signup:** Implement an endpoint for user registration. Users should provide their name, email, and password. Ensure that the email is unique.
-- **Login:** Implement an endpoint for user login. Use JWT (JSON Web Tokens) for authentication. The login should return a token that must be used to access protected endpoints.
+- **Signup:** Implement an endpoint for nagraUser registration. Users should provide their name, email, and password. Ensure that the email is unique.
+- **Login:** Implement an endpoint for nagraUser login. Use JWT (JSON Web Tokens) for authentication. The login should return a token that must be used to access protected endpoints.
 
 ### 2. Book Management
 - **GET API Operations:** Implement endpoints to get all books. Each book should have a title, author, description, publication date, and genre.
-- **Rate Limiting:** Implement rate limiting to restrict the number of requests a user can make to the book management endpoints. For example, allow only 60 requests per minute.
+- **Rate Limiting:** Implement rate limiting to restrict the number of requests a nagraUser can make to the book management endpoints. For example, allow only 60 requests per minute.
 
 ### 3. Request Throttling
 - Implement request throttling to handle high traffic. Ensure that the system can gracefully handle an influx of requests without crashing. Provide a meaningful error message when the rate limit is exceeded.
 
 ### 4. Unit and Integration Tests
-- Write unit tests for the user signup, login, and book management functionalities.
+- Write unit tests for the nagraUser signup, login, and book management functionalities.
 
 ## Bonus Marks if following features are implemented (Not mandatory)
 

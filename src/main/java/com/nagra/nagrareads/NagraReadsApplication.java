@@ -1,4 +1,4 @@
-package com.nagra.Nagra.Reads;
+package com.nagra.nagrareads;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,7 +1,7 @@
-package com.nagra.Nagra.Reads.contoller;
+package com.nagra.nagrareads.contoller;
 
-import com.nagra.Nagra.Reads.model.Book;
-import com.nagra.Nagra.Reads.service.BookService;
+import com.nagra.nagrareads.model.Book;
+import com.nagra.nagrareads.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

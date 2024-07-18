@@ -1,4 +1,4 @@
-package com.nagra.Nagra.Reads;
+package com.nagra.nagrareads;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

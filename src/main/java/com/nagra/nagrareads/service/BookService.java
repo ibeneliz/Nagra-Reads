@@ -1,7 +1,7 @@
-package com.nagra.Nagra.Reads.service;
+package com.nagra.nagrareads.service;
 
-import com.nagra.Nagra.Reads.model.Book;
-import com.nagra.Nagra.Reads.repository.BookRepository;
+import com.nagra.nagrareads.model.Book;
+import com.nagra.nagrareads.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

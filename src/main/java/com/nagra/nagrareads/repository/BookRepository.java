@@ -1,6 +1,6 @@
-package com.nagra.Nagra.Reads.repository;
+package com.nagra.nagrareads.repository;
 
-import com.nagra.Nagra.Reads.model.Book;
+import com.nagra.nagrareads.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
