@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/books")
 public class BookController {
 
     @Autowired
     private BookService bookService;
-
 
     @Operation(summary = "Get all book")
     @ApiResponses(value = {
@@ -30,7 +29,7 @@ public class BookController {
                     content = @Content),
             @ApiResponse(responseCode = "403", description = "Authorization failed. Please check if you have access!",
                     content = @Content)})
-    @GetMapping
+    @GetMapping("/all")
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
@@ -46,7 +45,7 @@ public class BookController {
                     content = @Content),
             @ApiResponse(responseCode = "403", description = "Authorization failed. Please check if you have access!",
                     content = @Content)})
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
         Book savedBook = bookService.saveBook(book);
         return ResponseEntity.ok(savedBook);
