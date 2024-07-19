@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class BookController {
             @ApiResponse(responseCode = "403", description = "Authorization failed. Please check if you have access!",
                     content = @Content)})
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
@@ -46,6 +48,7 @@ public class BookController {
             @ApiResponse(responseCode = "403", description = "Authorization failed. Please check if you have access!",
                     content = @Content)})
     @PostMapping("/add")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
         Book savedBook = bookService.saveBook(book);
         return ResponseEntity.ok(savedBook);
