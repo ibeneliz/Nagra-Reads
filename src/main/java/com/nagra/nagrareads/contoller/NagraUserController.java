@@ -5,15 +5,16 @@ import com.nagra.nagrareads.configuration.jwt.LoginForm;
 import com.nagra.nagrareads.configuration.jwt.NagraUserDetailService;
 import com.nagra.nagrareads.model.NagraUser;
 import com.nagra.nagrareads.repository.NagraUserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class NagraUserController {
@@ -29,7 +30,7 @@ public class NagraUserController {
     private NagraUserDetailService nagraUserDetailService;
 
     @PostMapping("/register/user")
-    public NagraUser createUser(@RequestBody NagraUser nagraUser) {
+    public NagraUser createUser(@RequestBody @Valid NagraUser nagraUser) {
         nagraUser.setPassword(passwordEncoder.encode(nagraUser.getPassword()));
         return nagraUserRepository.save(nagraUser);
     }

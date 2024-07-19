@@ -21,10 +21,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     @Autowired
-    NagraUserDetailService userDetailService;
+    private NagraUserDetailService userDetailService;
 
     @Autowired
-    JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private static final String[] SWAGGER_WHITELIST = {
             "/swagger-ui/**",
@@ -32,18 +32,24 @@ public class WebSecurityConfig {
             "/swagger-resources/**",
             "/swagger-resources",
     };
+    private static final String[] H2_WHITELIST = {
+            "/h2-console/**"
+    };
+    private static final String[] PUBLIC_ENDPOINTS = {
+            "/register/**", "/authenticate"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-
+        httpSecurity.headers().frameOptions().disable();
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers(SWAGGER_WHITELIST).permitAll();
-                    registry.requestMatchers("/h2-console/**").permitAll();
-                    registry.requestMatchers("/register/**", "/authenticate").permitAll();
+                    registry.requestMatchers(H2_WHITELIST).permitAll();
+                    registry.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
                     registry.requestMatchers("/books/add").hasRole("ADMIN");
-                    registry.requestMatchers("/books/all").hasRole("USER");
+                    registry.requestMatchers("/books/all").hasAnyRole("USER", "ADMIN");
                     registry.anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
