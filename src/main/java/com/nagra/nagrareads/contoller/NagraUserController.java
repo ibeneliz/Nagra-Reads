@@ -4,7 +4,7 @@ import com.nagra.nagrareads.configuration.jwt.JwtService;
 import com.nagra.nagrareads.configuration.jwt.NagraUserDetailService;
 import com.nagra.nagrareads.model.LoginCredentials;
 import com.nagra.nagrareads.model.NagraUser;
-import com.nagra.nagrareads.repository.NagraUserRepository;
+import com.nagra.nagrareads.service.NagraUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +21,7 @@ public class NagraUserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private NagraUserRepository nagraUserRepository;
+    private NagraUserService nagraUserService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -32,7 +32,7 @@ public class NagraUserController {
     @PostMapping("/register/user")
     public NagraUser createUser(@RequestBody @Valid NagraUser nagraUser) {
         nagraUser.setPassword(passwordEncoder.encode(nagraUser.getPassword()));
-        return nagraUserRepository.save(nagraUser);
+        return nagraUserService.save(nagraUser);
     }
 
     @PostMapping("/authenticate")

@@ -1,4 +1,4 @@
-package com.nagra.nagrareads.configuration.jwt;
+package com.nagra.nagrareads.configuration;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -79,7 +79,7 @@ public class GlobalExceptionHandler {
             errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#invalid-request"));
             errorDetail.setProperty("description", "Please check the request body");
         }
-        
+
         if (exception instanceof HttpMessageNotReadableException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), "Bad Request. Please check the data types like date, number etc.");
             errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#invalid-request"));
