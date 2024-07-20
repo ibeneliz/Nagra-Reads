@@ -1,8 +1,8 @@
 package com.nagra.nagrareads.contoller;
 
 import com.nagra.nagrareads.configuration.jwt.JwtService;
-import com.nagra.nagrareads.configuration.jwt.LoginForm;
 import com.nagra.nagrareads.configuration.jwt.NagraUserDetailService;
+import com.nagra.nagrareads.model.LoginCredentials;
 import com.nagra.nagrareads.model.NagraUser;
 import com.nagra.nagrareads.repository.NagraUserRepository;
 import jakarta.validation.Valid;
@@ -36,12 +36,12 @@ public class NagraUserController {
     }
 
     @PostMapping("/authenticate")
-    public String authenticateAndGetToken(@RequestBody LoginForm loginForm) {
+    public String authenticateAndGetToken(@RequestBody @Valid LoginCredentials loginCredentials) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginForm.username(), loginForm.password()
+                loginCredentials.getUsername(), loginCredentials.getPassword()
         ));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(nagraUserDetailService.loadUserByUsername(loginForm.username()));
+            return jwtService.generateToken(nagraUserDetailService.loadUserByUsername(loginCredentials.getUsername()));
         } else {
             throw new UsernameNotFoundException("Invalid credentials");
         }

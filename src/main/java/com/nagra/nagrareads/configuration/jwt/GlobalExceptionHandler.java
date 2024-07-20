@@ -2,25 +2,45 @@ package com.nagra.nagrareads.configuration.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception exception) throws URISyntaxException {
         ProblemDetail errorDetail = null;
 
         // TODO send this stack trace to an logging tool
-        System.out.println(exception.getStackTrace());
+        exception.printStackTrace();
 
         if (exception instanceof BadCredentialsException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
@@ -37,7 +57,7 @@ public class GlobalExceptionHandler {
         }
 
         if (exception instanceof AccessDeniedException) {
-            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
             errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#access-denied"));
             errorDetail.setProperty("description", "You are not authorized to access this resource");
         }
@@ -52,6 +72,24 @@ public class GlobalExceptionHandler {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
             errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#jwt-expired"));
             errorDetail.setProperty("description", "The JWT token has expired");
+        }
+
+        if (exception instanceof MethodArgumentNotValidException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), "Bad Request. Please check the request body");
+            errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#invalid-request"));
+            errorDetail.setProperty("description", "Please check the request body");
+        }
+        
+        if (exception instanceof HttpMessageNotReadableException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), "Bad Request. Please check the data types like date, number etc.");
+            errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#invalid-request"));
+            errorDetail.setProperty("description", "Please check the data types like date, number etc.");
+        }
+
+        if (exception instanceof NoResourceFoundException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), "Resource not found. Please check the request URL.");
+            errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#resource-not-found"));
+            errorDetail.setProperty("description", "Resource not found. Please check the request URL.");
         }
 
         if (errorDetail == null) {

@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -49,8 +51,8 @@ public class BookController {
                     content = @Content)})
     @PostMapping("/add")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+    public ResponseEntity<Book> addBook(@RequestBody @Valid Book book) {
         Book savedBook = bookService.saveBook(book);
-        return ResponseEntity.ok(savedBook);
+        return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
     }
 }
