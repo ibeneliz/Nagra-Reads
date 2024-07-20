@@ -3,6 +3,9 @@ package com.nagra.nagrareads.configuration.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Base64;
@@ -10,9 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Configuration
 public class JwtService {
@@ -28,11 +28,11 @@ public class JwtService {
                 .subject(userDetails.getUsername())
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plusMillis(VALIDITY)))
-                .signWith(generateKey())
+                .signWith(getSignInKey())
                 .compact();
     }
 
-    private SecretKey generateKey() {
+    private SecretKey getSignInKey() {
         byte[] decodedKey = Base64.getDecoder().decode(SECRET);
         return Keys.hmacShaKeyFor(decodedKey);
     }
@@ -44,15 +44,16 @@ public class JwtService {
 
     private Claims getClaims(String jwt) {
         return Jwts.parser()
-                .verifyWith(generateKey())
+                .verifyWith(getSignInKey())
                 .build()
                 .parseSignedClaims(jwt)
                 .getPayload();
     }
 
-    public boolean isTokenValid(String jwt) {
+    public boolean isTokenValid(String jwt, UserDetails userDetails) {
+        final String username = extractUsername(jwt);
         Claims claims = getClaims(jwt);
-        return claims.getExpiration().after(Date.from(Instant.now()));
+        return (username.equals(userDetails.getUsername())) && claims.getExpiration().after(Date.from(Instant.now()));
     }
 
 }
