@@ -2,7 +2,9 @@ package com.nagra.nagrareads.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,11 +18,12 @@ public class NagraUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Invalid name: Empty name")
     @Column(nullable = false)
     private String name;
 
     @NotBlank
+    @Email(message = "Invalid email: Example is user@gmail.com")
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -28,7 +31,7 @@ public class NagraUser {
     @Column(nullable = false)
     private String password;
 
-    @NotBlank
+    @NotNull
     @Column(nullable = false)
-    private String role;
+    private UserType userType;
 }

@@ -32,10 +32,7 @@ public class NagraUserDetailService implements UserDetailsService {
         }
     }
 
-    private String[] getRoles(NagraUser user) {
-        if (user.getRole() == null) {
-            return new String[]{"USER"};
-        }
-        return user.getRole().split(",");
+    private String getRoles(NagraUser user) {
+        return user.getUserType().toString();
     }
 }

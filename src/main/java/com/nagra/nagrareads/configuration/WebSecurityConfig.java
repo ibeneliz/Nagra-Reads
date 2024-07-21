@@ -41,7 +41,7 @@ public class WebSecurityConfig {
             "/h2-console/**"
     };
     private static final String[] PUBLIC_ENDPOINTS = {
-            "/register/**", "/authenticate"
+            "/users/**"
     };
 
     @Bean

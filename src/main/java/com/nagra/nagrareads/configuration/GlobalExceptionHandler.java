@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
         }
 
         if (exception instanceof MethodArgumentNotValidException) {
-            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), "Bad Request. Please check the request body");
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), "Bad Request. Please check the request parameters");
             errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#invalid-request"));
             errorDetail.setProperty("description", "Please check the request body");
         }
@@ -90,6 +90,12 @@ public class GlobalExceptionHandler {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), "Resource not found. Please check the request URL.");
             errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#resource-not-found"));
             errorDetail.setProperty("description", "Resource not found. Please check the request URL.");
+        }
+
+        if (exception instanceof IllegalArgumentException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getLocalizedMessage());
+            errorDetail.setType(new URI("https://www.nagrareads.com/platform/developers/common-errors#resource-not-found"));
+            errorDetail.setProperty("description", "Illegal argument received. Please retry with proper data.");
         }
 
         if (errorDetail == null) {

@@ -12,6 +12,9 @@ public class NagraUserService {
     private NagraUserRepository nagraUserRepository;
 
     public NagraUser save(NagraUser nagraUser) {
+        nagraUserRepository.findByUsername(nagraUser.getUsername()).ifPresent(user -> {
+            throw new IllegalArgumentException("Username already exists");
+        });
         return nagraUserRepository.save(nagraUser);
     }
 

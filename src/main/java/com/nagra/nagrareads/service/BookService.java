@@ -18,6 +18,9 @@ public class BookService {
     }
 
     public Book saveBook(Book book) {
+        bookRepository.findByIsbn(book.getIsbn()).ifPresent(existingBook -> {
+            throw new IllegalArgumentException("Book with same ISBN already exists");
+        });
         return bookRepository.save(book);
     }
 }

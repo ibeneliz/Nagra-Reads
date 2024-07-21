@@ -17,9 +17,7 @@ import java.io.IOException;
 
 @Configuration
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    @Autowired
-    private JwtService jwtService;
+    
     @Autowired
     private NagraUserDetailService nagraUserDetailService;
     @Autowired
@@ -35,10 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
-            final String username = jwtService.extractUsername(jwt);
+            final String username = JwtUtils.extractUsername(jwt);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = nagraUserDetailService.loadUserByUsername(username);
-                if (userDetails != null && jwtService.isTokenValid(jwt, userDetails)) {
+                if (userDetails != null && JwtUtils.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             username,
                             userDetails.getPassword(),
