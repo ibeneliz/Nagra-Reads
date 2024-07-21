@@ -1,4 +1,4 @@
-package com.nagra.nagrareads.contoller;
+package com.nagra.nagrareads.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nagra.nagrareads.configuration.jwt.NagraUserDetailService;
