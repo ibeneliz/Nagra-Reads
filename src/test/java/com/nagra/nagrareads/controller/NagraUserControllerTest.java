@@ -67,7 +67,14 @@ class NagraUserControllerTest {
 
         mockMvc.perform(post("/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newUser))
+                        .content("""
+                                {
+                                    "name": "ADMIN",
+                                    "username": "ADMIN@gmail.com",
+                                    "password": "1234",
+                                    "userType": "ADMIN"
+                                }
+                                """)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isCreated())
@@ -77,26 +84,20 @@ class NagraUserControllerTest {
     @Test
     @WithMockUser(roles = {"USER"})
     void when_register_should_failWithoutCorrectRequest() throws Exception {
-        NagraUser newUser = new NagraUser();
-        newUser.setName("ADMIN");
-        newUser.setPassword("1234");
-        newUser.setUserType(UserType.ADMIN);
-
-        NagraUser savedUser = new NagraUser();
-        savedUser.setId(1L);
-        savedUser.setName(newUser.getName());
-        savedUser.setUsername(newUser.getUsername());
-        savedUser.setPassword(newUser.getPassword());
-        savedUser.setUserType(newUser.getUserType());
-
-        given(nagraUserService.save(any())).willReturn(savedUser);
 
         mockMvc.perform(post("/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newUser))
+                        .content("""
+                                {
+                                    "name": "ADMIN",
+                                    "username": "ADMIN",
+                                    "password": "1234",
+                                    "userType": "ADMIN"
+                                }
+                                """)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.username", is("must not be blank")));
+                .andExpect(jsonPath("$.username", is("Invalid email: Example is user@gmail.com")));
     }
 }

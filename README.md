@@ -2,36 +2,52 @@
 
 ## Objective
 
-Implement a RESTful API for a fictional online bookstore using a database of your choice. The API should provide functionality for nagraUser signup, login, book management, and search.
+Implement a RESTful API for a fictional online bookstore using a database of your choice. The API should provide
+functionality for nagraUser signup, login, book management, and search.
 
 ## Requirements
 
 ### 1. User Management
-- **Signup:** Implement an endpoint for nagraUser registration. Users should provide their name, email, and password. Ensure that the email is unique.
-- **Login:** Implement an endpoint for nagraUser login. Use JWT (JSON Web Tokens) for authentication. The login should return a token that must be used to access protected endpoints.
+
+- **Signup:** Implement an endpoint for nagraUser registration. Users should provide their name, email, and password.
+  Ensure that the email is unique.
+- **Login:** Implement an endpoint for nagraUser login. Use JWT (JSON Web Tokens) for authentication. The login should
+  return a token that must be used to access protected endpoints.
 
 ### 2. Book Management
-- **GET API Operations:** Implement endpoints to get all books. Each book should have a title, author, description, publication date, and genre.
-- **Rate Limiting:** Implement rate limiting to restrict the number of requests a nagraUser can make to the book management endpoints. For example, allow only 60 requests per minute.
+
+- **GET API Operations:** Implement endpoints to get all books. Each book should have a title, author, description,
+  publication date, and genre.
+- **Rate Limiting:** Implement rate limiting to restrict the number of requests a nagraUser can make to the book
+  management endpoints. For example, allow only 60 requests per minute.
 
 ### 3. Request Throttling
-- Implement request throttling to handle high traffic. Ensure that the system can gracefully handle an influx of requests without crashing. Provide a meaningful error message when the rate limit is exceeded.
+
+- Implement request throttling to handle high traffic. Ensure that the system can gracefully handle an influx of
+  requests without crashing. Provide a meaningful error message when the rate limit is exceeded.
 
 ### 4. Unit and Integration Tests
+
 - Write unit tests for the nagraUser signup, login, and book management functionalities.
 
 ## Bonus Marks if following features are implemented (Not mandatory)
 
 ### 1. Book Reviews and Ratings
+
 - Implement all CRUD APIs for book management.
-- Implement endpoints for users to add reviews and ratings to books. Each review should have a rating (1-5), a comment, and a timestamp.
+- Implement endpoints for users to add reviews and ratings to books. Each review should have a rating (1-5), a comment,
+  and a timestamp.
 - Ensure that users can only review a book once, and they can update their review if needed.
 
 ### 2. Data Validation and Error Handling
-- Implement comprehensive data validation and error handling for all endpoints. Ensure that invalid data is properly handled and meaningful error messages are returned.
+
+- Implement comprehensive data validation and error handling for all endpoints. Ensure that invalid data is properly
+  handled and meaningful error messages are returned.
 
 ### 3. Documentation
-- Provide API documentation using Swagger or a similar tool. The documentation should include details about each endpoint, the request and response formats, and any authentication requirements.
+
+- Provide API documentation using Swagger or a similar tool. The documentation should include details about each
+  endpoint, the request and response formats, and any authentication requirements.
 
 ## Instructions
 
@@ -49,3 +65,17 @@ Implement a RESTful API for a fictional online bookstore using a database of you
 - Quality and coverage of tests.
 - Quality of API documentation.
 - Handling of edge cases and error conditions.
+
+## Setup and Run
+
+1. Make Sure JDK 21 is installed in your system.
+2. Clone this repository.
+3. Open terminal and navigate to the project directory.
+4. Run the following command to start the application:
+   ```
+   ./mvnw spring-boot:run
+   ```
+5. The application will start on port 8080.
+6. You can access the API documentation at `http://localhost:8080/swagger-ui/index.html`.
+
+![Alt text](./img.png "Swagger UI")
