@@ -23,4 +23,28 @@ public class BookService {
         });
         return bookRepository.save(book);
     }
+
+    public Book updateBook(Book book) {
+        Book existingBook = bookRepository.findByIsbn(book.getIsbn())
+                .orElseThrow(() -> new IllegalArgumentException("Book with the given ISBN is not found!"));
+        existingBook.setTitle(book.getTitle());
+        existingBook.setDescription(book.getDescription());
+        existingBook.setAuthor(book.getAuthor());
+        existingBook.setGenre(book.getGenre());
+        existingBook.setIsbn(book.getIsbn());
+        existingBook.setPublicationDate(book.getPublicationDate());
+        return bookRepository.save(existingBook);
+    }
+
+    public Book getByIsbn(String isbn) {
+        return bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new IllegalArgumentException("Book with the given ISBN is not found!"));
+    }
+    
+    public void deleteByIsbn(String isbn) {
+        Book existingBook = bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new IllegalArgumentException("Book with the given ISBN is not found!"));
+        bookRepository.deleteById(existingBook.getId());
+    }
+
 }

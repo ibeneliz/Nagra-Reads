@@ -55,4 +55,57 @@ public class BookController {
         Book savedBook = bookService.saveBook(book);
         return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
     }
+
+    @Operation(summary = "Update a book")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Updated the book",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request. Please check the request body!",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication failed. Please check the request header!",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Authorization failed. Please check if you have access!",
+                    content = @Content)})
+    @PutMapping("/update")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<Book> updateBook(@RequestBody @Valid Book book) {
+        Book updatedBookDetails = bookService.updateBook(book);
+        return new ResponseEntity<>(updatedBookDetails, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get book by ISBN")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns the book with the given ISBN",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request. Please check the request body!",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication failed. Please check the request header!",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Authorization failed. Please check if you have access!",
+                    content = @Content)})
+    @GetMapping("/{isbn}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<Book> getByIsbn(@PathVariable @Valid String isbn) {
+        return new ResponseEntity<>(bookService.getByIsbn(isbn), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Delete a book")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deleted a book",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request. Please check the request body!",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Authentication failed. Please check the request header!",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Authorization failed. Please check if you have access!",
+                    content = @Content)})
+    @DeleteMapping("/{isbn}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<Book> deleteByIsbn(@PathVariable @Valid String isbn) {
+        bookService.deleteByIsbn(isbn);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
